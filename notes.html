@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>notes.html</title>
+
+</head>
+
+<body>
+
+<h1>TIDALCYCLES NOTES</h1>
+
+<ul>
+<li>You've just executed <code>p 1 $ sound "bd sn"</code>, what just happened?</li>
+<li><code>p 1</code> specifies the <strong>p</strong>attern named 1
+<ul>
+<li>can be named anything, even strings (try replacing <code>p 1</code> with <code>p "jamz"</code>)</li>
+</ul></li>
+<li><code>sound "bd sn"</code> specifies the pattern will be comprised of the <strong>sound</strong>s <code>bd</code> and <code>sn</code> with <code>bd</code> coming at the beginning of the cycle and <code>sn</code> coming halfway through
+<ul>
+<li><code>s</code> is shorthand for <code>sound</code> (try replacing <code>sound "bd sn"</code> with <code>s "bd sn"</code></li>
+<li>what happens when we change <code>"bd sn"</code> to <code>"bd sn cp"</code>?</li>
+</ul></li>
+<li><code>hush</code>ing individual patterns: <code>silence</code>
+<ul>
+<li><code>p 1 $ silence</code></li>
+</ul></li>
+</ul>
+
+<h2>MINI NOTATION</h2>
+
+<ul>
+<li>grouping <code>[]</code> (<code>.</code> shorthand)
+<ul>
+<li><code>s "bd [sn ho]"</code></li>
+<li>equivalent: <code>s "bd . sn ho"</code></li>
+</ul></li>
+<li>rests <code>~</code>
+<ul>
+<li><code>s "bd [~ ho]"</code></li>
+</ul></li>
+<li>hold <code>_</code>
+<ul>
+<li><code>s "bd [_ ho]"</code></li>
+</ul></li>
+<li>fast (repeat) <code>*</code> (think of <code>sn</code> as its own little cycle)
+<ul>
+<li><code>s "bd [sn*2 ho]"</code></li>
+<li>equivalent: <code>s "bd [sn sn . ho]"</code></li>
+</ul></li>
+<li>replicate <code>!</code>
+<ul>
+<li><code>s "bd [sn ! . ho]"</code></li>
+<li><code>s "[bd !] [sn!4 . ho]"</code></li>
+<li>equivalent: <code>s "[bd bd]  [sn sn sn sn . ho]"</code></li>
+<li><ul>
+<li>equivalent: <code>s "[bd bd]  [sn ! ! ! . ho]"</code></li>
+</ul></li>
+</ul></li>
+<li>slow <code>/</code> (think of <code>bd</code> as its own little cycle)
+<ul>
+<li><code>s "bd/2"</code></li>
+</ul></li>
+<li>alternate <code>&lt;&gt;</code>
+<ul>
+<li><code>s "&lt;bd cp&gt; sn"</code></li>
+</ul></li>
+<li>chance <code>?</code> (50%)
+<ul>
+<li><code>s "bd? sn"</code></li>
+</ul></li>
+<li>layering <code>,</code>
+<ul>
+<li><code>s "bd [sn, cp]"</code>  </li>
+</ul></li>
+</ul>
+
+<h2>TACKING ON EFFECTS PARAMETERS</h2>
+
+<ul>
+<li>things that affect the output of the pattern</li>
+<li><code>#</code></li>
+<li>let's try tacking on a low-pass filter
+<ul>
+<li><code>p 1 $ s "bd sn" # lpf 250</code></li>
+</ul></li>
+<li>let's try out reducing the volume
+<ul>
+<li><code>p 1 $ s "bd sn" # gain 0.5</code></li>
+</ul></li>
+<li>now let's try out reducing the volume and distorting the heck out of it
+<ul>
+<li>can tack on multiple parameters</li>
+<li><code>p 1 $ s "bd sn" # gain 0.5 # shape 0.75</code></li>
+</ul></li>
+<li>in general, these parameters specified with <code>#</code> goes to the <strong>right</strong> of the pattern string</li>
+</ul>
+
+<h2>MODIFYING PATTERNS</h2>
+
+<ul>
+<li>things that affect/define the structure of the pattern</li>
+<li><code>$</code>
+<ul>
+<li>in <code>p 1 $ s "bd sn"</code>, <code>s "bd sn"</code> defines the pattern structure</li>
+</ul></li>
+<li>let's drop things out of the pattern by chance
+<ul>
+<li><code>p 1 $ degradeBy 0.25 $ s "bd sn"</code></li>
+</ul></li>
+<li>let's make the pattern go twice as fast (<code>*</code>)
+<ul>
+<li><code>p 1 $ fast 2 $ s "bd sn"</code></li>
+</ul></li>
+<li>let's add a copy of the pattern that goes twice as fast and has things drop out randomly
+<ul>
+<li><code>p 1 $ superimpose (fast 2 . degradeBy 0.25) $ s "bd sn"</code></li>
+<li>note that in the parentheses, we string together <code>$</code> type things with <code>.</code></li>
+<li><code>#</code> requires the <code>#</code> and parentheses and the <code>.</code> (<code>superimpose (fast 2 . (# lpf 100))</code>)</li>
+</ul></li>
+<li>in general, these <strong>functions</strong> go to the <strong>left</strong> of the pattern string</li>
+</ul>
+
+<h2>NOTES ON PATTERN STRINGS</h2>
+
+<ul>
+<li>don't just have to be centered around <code>s</code></li>
+<li>let's make a pattern around the volume of snare drum hits
+<ul>
+<li><code>p 1 $ gain "1 0.8 ! !" # s "sn"</code></li>
+<li>note that since <code>gain</code> is defining the pattern structure now, <code>s</code> essentially becomes a parameter</li>
+</ul></li>
+<li>what happens if we get a bit more complicated with the second pattern string?
+<ul>
+<li><code>p 1 $ gain "1 0.8 ! !" # s "bd sn"</code></li>
+<li>the <code>gain</code> bit with <code>$</code> <strong>defines</strong> the pattern structure, the <code>s</code> bit with <code>#</code> fits itself around it</li>
+<li>what happens if we try <code>p 1 $ gain "1 0.8 ! !" $ s "bd sn"</code>?</li>
+</ul></li>
+<li>other fun stuff: <code>note</code> (defined in semitones), <code>speed</code> (defined in proportions)
+<ul>
+<li><code>p 1 $ speed "2 1 1 1" # s "hh"</code></li>
+</ul></li>
+</ul>
+
+<h2>MODIFYING EFFECTS PARAMETERS</h2>
+
+<ul>
+<li><code>|*</code>, <code>|+</code>, <code>|-</code></li>
+<li>let's take the <code>speed</code> example from before but we want to base these speeds on a <code>0.75</code> speed <code>hh</code>
+<ul>
+<li><code>p 1 $ speed "2 1 1 1" |* speed 0.75 # s "hh"</code></li>
+<li>order is a bit more flexible: <code>p 1 $ speed "2 1 1 1" # s "hh" |* speed 0.75</code></li>
+</ul></li>
+<li><code>|</code> points in the direction of where our pattern structure is coming from (from the left)
+<ul>
+<li>also <code>*|</code>, <code>|*|</code> but more confusing and don't really use those...</li>
+</ul></li>
+<li>like <code>#</code>, needs to be nestled within parentheses with functions involving parentheses
+<ul>
+<li><code>p 1 $ superimpose (fast 2 . (|* speed 2)) $ speed "2 1 1 1" # s "hh"</code></li>
+</ul></li>
+</ul>
+
+<h2>OTHER CAPABILITIES</h2>
+
+<ul>
+<li>custom OSC message output (link up with <code>p5.js</code>)</li>
+<li>midi message output (link up with <code>Pure Data</code>)</li>
+</ul>
+
+</body>
+</html>

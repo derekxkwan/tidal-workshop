@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>intro.html</title>
+
+</head>
+
+<body>
+
+<h1>TIDALCYCLES INTRO</h1>
+
+<p><a href="https://tidalcycles.org/">https://tidalcycles.org/</a></p>
+
+<h2>WHAT IS TIDALCYCLES</h2>
+
+<ul>
+<li>a way of generating music through code live</li>
+<li>operates on around the basis of "cycles" (musical equivalent to bar/measure)</li>
+</ul>
+
+<h3>ALTERNATIVES</h3>
+
+<ul>
+<li>Sonic Pi</li>
+<li>FoxDot</li>
+<li>ORCA</li>
+</ul>
+
+<h2>COMPONENTS</h2>
+
+<ul>
+<li>Haskell DSL (sends OSC messages to SuperCollider aka <code>Tidal</code>)</li>
+<li>SuperCollider + Quark (sound generation aka <code>SuperDirt</code>)</li>
+<li>editor plugin (Atom, Vim, Emacs, VS Code, Sublime Text)</li>
+</ul>
+
+<h2>INSTALLATION</h2>
+
+<h3>EVERYTHING (Git, SuperCollider, Haskell, Atom)</h3>
+
+<h4>LINUX</h4>
+
+<ul>
+<li>=(</li>
+</ul>
+
+<h4>MAC</h4>
+
+<ul>
+<li><code>curl https://tidalcycles.org/tidal-bootstrap.sh -sSf | sh</code></li>
+</ul>
+
+<h4>WIN</h4>
+
+<ul>
+<li><a href="https://tidalcycles.org/index.php/Windows_choco_install">https://tidalcycles.org/index.php/Windows<em>choco</em>install</a></li>
+</ul>
+
+<h3>BY STEPS</h3>
+
+<h4>HASKELL</h4>
+
+<ul>
+<li><code>cabal update</code></li>
+<li><code>cabal install tidal</code></li>
+</ul>
+
+<h5>LINUX/MAC/WIN</h5>
+
+<ul>
+<li><a href="https://www.haskell.org/platform/">https://www.haskell.org/platform/</a></li>
+</ul>
+
+<h5>LINUX ALT.</h5>
+
+<ul>
+<li><code>sudo apt install ghc cabal-install</code></li>
+</ul>
+
+<h4>MAC ALT.</h4>
+
+<ul>
+<li><code>brew install ghc cabal-install</code></li>
+</ul>
+
+<h4>EDITOR PLUGINS</h4>
+
+<ul>
+<li><a href="https://tidalcycles.org/index.php/List_of_tidal_editors">https://tidalcycles.org/index.php/List<em>of</em>tidal_editors</a></li>
+</ul>
+
+<h4>SUPERCOLLIDER</h4>
+
+<ul>
+<li><a href="https://supercollider.github.io/">https://supercollider.github.io/</a></li>
+<li><code>Quarks.gui</code> -> Check <code>SuperDirt</code></li>
+<li>Note for Linux users, require use of <code>JACK</code></li>
+</ul>
+
+<h2>GET UP AND RUNNING</h2>
+
+<ul>
+<li>Start SuperCollider</li>
+<li><code>SuperDirt.start</code></li>
+<li>open up a <code>.tidal</code> file in your favorite editor</li>
+<li>type in <code>p 1 $ sound "bd sn"</code> which will start a nifty bass drum/snare drum loop once executed</li>
+<li>type in <code>hush</code> to hush everything once executed</li>
+</ul>
+
+<h2>EDITOR COMMANDS</h2>
+
+<h3>EMACS</h3>
+
+<ul>
+<li>start Tidal: <code>C-c C-s</code></li>
+<li>run line: <code>C-c C-c</code></li>
+<li>run multiple lines: <code>C-c C-e</code></li>
+</ul>
+
+<h3>ATOM</h3>
+
+<ul>
+<li>start Tidal: <code>Packages &gt; TidalCycles &gt; Boot TidalCycles</code></li>
+<li>run line: <code>shift+enter</code></li>
+<li>run multiple lines: <code>(cmd/ctrl)+enter</code></li>
+</ul>
+
+</body>
+</html>
