@@ -5,11 +5,6 @@
 - a way of generating music through code live
 - operates on around the basis of "cycles" (musical equivalent to bar/measure)
 
-### ALTERNATIVES
-- Sonic Pi
-- FoxDot
-- ORCA
-
 ## COMPONENTS
 - Haskell DSL (sends OSC messages to SuperCollider aka `Tidal`)
 - SuperCollider + Quark (sound generation aka `SuperDirt`)

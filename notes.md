@@ -81,6 +81,83 @@
 - like `#`, needs to be nestled within parentheses with functions involving parentheses
   - `p 1 $ superimpose (fast 2 . (|* speed 2)) $ speed "2 1 1 1" # s "hh"`
 
+## SAMPLE MANIPULATION
+- use `legato 1` or `cut 1` for making sure sample segments don't bleed over (the int in `cut` groups together things to cut)
+- the parameters `begin` and `end` (helpful when reversing a sample ie `# speed (-1)`) control the start/end points of a sample and range from 0 to 1
+- `slice` can also be used as a function to slice up samples
+  - `p 1 $ slice 32 "0 3 10 20" $ s "bev"`
+- `sustain` can be used to cut sample short
+  - great for glitchy sorta drummy sounds, esp combined with `note` or `gain`
+  - `p 1 $ note "0 [~ 12*3] 7*2 [~ 17 . ~ 12]" # s "bd" # sustain 0.005`
+- `chop`, `gap`, `striate` granulate (chop into very small bits) samples in various ways
+- custom sound files (`.wav` or `aiff.`) can be loaded with `~dirt.loadSoundFiles("/path/to/folder/*");`
+  - sounds are specified in pattern strings by the subfolders that contain them
+	- `/path/to/folder/neat/sound.wav`is specified by `neat` (`s " bd neat hh neat"`)
+ - individual sound files in the example `neat` folder are picked out by `:` (not sure of ordering, 0 indexed)
+   - `s "neat neat:1 neat:2 neat:3"` 
+
+## SYNTHS
+- synthesizers can also be specified with `s`!
+- some synths: `supermandolin` (karplus), `superpiano`, `supersaw`, `superfork`, `superchip`,...
+  - each has their various parameters
+- pitches are specified by `note` (`n` for short), are numbered chromatically, and centered around C4
+  - `n` can also take note names (`c`, `c4` to specify octave, `cs4` where s is sharp, `cf4` where `f` is flat)  
+- `scale (scale name) (pattern string)` can be passed to n (where the numbers refer to scale degrees)
+  - `p 1 $ n (scale "major" "0 2 4 6") $ s "superpiano"`
+  - there are many many scales built in: `major`, `minor`, `lydian`, `dorian`, `mixolydian`, etc., ...
+- chords can be direcly passed into `n` and are tacked onto note names with `'`
+  - ie `c'maj`, `c4'sus4`, `df3'min7`,...
+  - there are many chords: `maj`,`min`,`dom7`, `maj9`, `7f5`, etc., ...
+  - chords can also be `arp`eggiated!
+	- `p 1 $ n (arp "c4'maj7 a3'min7")`
+	- possible arpgegiations include `up`, `down`, `updown`, `converge`, `thumbup`, etc.,...
+
+## ASSORTED EFFECTS
+- delay with feedback: `delayfb`, `delay` (for amount of delay signal), `delaytime` (units in seconds, helpful to use with `# lock 1` to lock to cycle units)
+- - `delayfb`, `delay` go from 0 to 1
+- reverb: `room` (initial reflections), `size` (late reflections), `dry`(amount of clean signal to go through)
+- distortion: `shape (0-1)`
+- bitcrushing: `crush (int)` where int is number of bits 
+- sample rate reduction: `coarse (int)`where int is amount of rate reduction
+- filters: `lpf`, `bpf`, `hpf`for low-pass/bandpass/hi-pass, `vowel` for vowel formant filters
+- NOTE: effects like delay and reverb (and `leslie`) are "global" effects, they affect all synths within a given group
+  - specify groups with `orbit (int)`(0 default)
+
+## CHANCE FUNCTIONS
+- execute things by chance!
+- `sometimesBy (f)` to execute things by chance on a event-by-event basis
+  - `p 1 $ sometimesBy 0.25 (|+ note 12) $ note "0 7 12" # s "superpiano"`
+- `someCyclesBy (f)` to execute things by change on a cycle-by-cycle basis
+
+## CONTINUOUS FUNCTIONS
+- functions that don't have discrete steps (and so using them to structure patterns makes things go really fast)
+  - can be made discrete with `segment (int)` which discretizes the function into given steps
+- usually used as arguments for parameters (`# pan (rand)`)
+- `rand` for float randomness 0-1 (pair with `range (lo) (hi)` to map to a specific range)
+- `irand (int)` for random ints from 0 to n-1
+- `saw` for ramp 0-1 over cycle (`isaw` for the other way around)
+- `square` for switching from 0 to 1 midway through cycle
+- `sine`/`cosine` for their respective ranges
+- `tri` for linearly ramping from 0 to 1 to 0 over a given cycle
+- NOTE: can use `slow` and `fast` to change the rates of these functions!
+
+## OTHER RANDOMNESS
+- all continuous
+- `choose [a]` to choose elements from array
+- `wchoose [a]` to choose by given weights in the format `(choice, weight)`
+-`cycleChoose [a]` makes a choice per cycle and thus **not continuous**!
+
+## SOME TRANSITIONS
+- used for not changing patterns immediately
+- take the form `(transition) (pattern name) (number of cycles)`
+- transitions start when executed but have forms followed by `'` that aligns their execution to the next cycle start
+- `xfadeIn`/`xfadeIn'` for crossfades, `jumpIn`/`jumpIn'` for immediate switches `clutchIn` for pattern xfades (not gain-based)...
+
+## RANDOM HASKELL NOTES
+- `$` doubles as putting everything to the right in parentheses
+- negative numbers require parentheses
+  - `# speed -1` doesn't work but `# speed (-1)` does!
+
 ## OTHER CAPABILITIES
 - custom OSC message output (link up with `p5.js`)
 - midi message output (link up with `Pure Data`)

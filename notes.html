@@ -6,7 +6,13 @@
 
 <head>
 <title>notes.html</title>
-
+<style type='text/css'>
+html,body {font-family: 'Geneva', 'Verdana', sans-serif;
+background-color:white' }
+img {border:none;}
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
+</style>
 </head>
 
 <body>
@@ -161,6 +167,131 @@
 <li>like <code>#</code>, needs to be nestled within parentheses with functions involving parentheses
 <ul>
 <li><code>p 1 $ superimpose (fast 2 . (|* speed 2)) $ speed "2 1 1 1" # s "hh"</code></li>
+</ul></li>
+</ul>
+
+<h2>SAMPLE MANIPULATION</h2>
+
+<ul>
+<li>use <code>legato 1</code> or <code>cut 1</code> for making sure sample segments don't bleed over (the int in <code>cut</code> groups together things to cut)</li>
+<li>the parameters <code>begin</code> and <code>end</code> (helpful when reversing a sample ie <code># speed (-1)</code>) control the start/end points of a sample and range from 0 to 1</li>
+<li><code>slice</code> can also be used as a function to slice up samples
+<ul>
+<li><code>p 1 $ slice 32 "0 3 10 20" $ s "bev"</code></li>
+</ul></li>
+<li><code>sustain</code> can be used to cut sample short
+<ul>
+<li>great for glitchy sorta drummy sounds, esp combined with <code>note</code> or <code>gain</code></li>
+<li><code>p 1 $ note "0 [~ 12*3] 7*2 [~ 17 . ~ 12]" # s "bd" # sustain 0.005</code></li>
+</ul></li>
+<li><code>chop</code>, <code>gap</code>, <code>striate</code> granulate (chop into very small bits) samples in various ways</li>
+<li>custom sound files (<code>.wav</code> or <code>aiff.</code>) can be loaded with <code>~dirt.loadSoundFiles("/path/to/folder/*");</code>
+<ul>
+<li>sounds are specified in pattern strings by the subfolders that contain them</li>
+<li><code>/path/to/folder/neat/sound.wav</code>is specified by <code>neat</code> (<code>s " bd neat hh neat"</code>)</li>
+<li>individual sound files in the example <code>neat</code> folder are picked out by <code>:</code> (not sure of ordering, 0 indexed)</li>
+<li><code>s "neat neat:1 neat:2 neat:3"</code> </li>
+</ul></li>
+</ul>
+
+<h2>SYNTHS</h2>
+
+<ul>
+<li>synthesizers can also be specified with <code>s</code>!</li>
+<li>some synths: <code>supermandolin</code> (karplus), <code>superpiano</code>, <code>supersaw</code>, <code>superfork</code>, <code>superchip</code>,...
+<ul>
+<li>each has their various parameters</li>
+</ul></li>
+<li>pitches are specified by <code>note</code> (<code>n</code> for short), are numbered chromatically, and centered around C4
+<ul>
+<li><code>n</code> can also take note names (<code>c</code>, <code>c4</code> to specify octave, <code>cs4</code> where s is sharp, <code>cf4</code> where <code>f</code> is flat)  </li>
+</ul></li>
+<li><code>scale (scale name) (pattern string)</code> can be passed to n (where the numbers refer to scale degrees)
+<ul>
+<li><code>p 1 $ n (scale "major" "0 2 4 6") $ s "superpiano"</code></li>
+<li>there are many many scales built in: <code>major</code>, <code>minor</code>, <code>lydian</code>, <code>dorian</code>, <code>mixolydian</code>, etc., ...</li>
+</ul></li>
+<li>chords can be direcly passed into <code>n</code> and are tacked onto note names with <code>'</code>
+<ul>
+<li>ie <code>c'maj</code>, <code>c4'sus4</code>, <code>df3'min7</code>,...</li>
+<li>there are many chords: <code>maj</code>,<code>min</code>,<code>dom7</code>, <code>maj9</code>, <code>7f5</code>, etc., ...</li>
+<li>chords can also be <code>arp</code>eggiated!</li>
+<li><code>p 1 $ n (arp "c4'maj7 a3'min7")</code></li>
+<li>possible arpgegiations include <code>up</code>, <code>down</code>, <code>updown</code>, <code>converge</code>, <code>thumbup</code>, etc.,...</li>
+</ul></li>
+</ul>
+
+<h2>ASSORTED EFFECTS</h2>
+
+<ul>
+<li>delay with feedback: <code>delayfb</code>, <code>delay</code> (for amount of delay signal), <code>delaytime</code> (units in seconds, helpful to use with <code># lock 1</code> to lock to cycle units)</li>
+<li><ul>
+<li><code>delayfb</code>, <code>delay</code> go from 0 to 1</li>
+</ul></li>
+<li>reverb: <code>room</code> (initial reflections), <code>size</code> (late reflections), <code>dry</code>(amount of clean signal to go through)</li>
+<li>distortion: <code>shape (0-1)</code></li>
+<li>bitcrushing: <code>crush (int)</code> where int is number of bits </li>
+<li>sample rate reduction: <code>coarse (int)</code>where int is amount of rate reduction</li>
+<li>filters: <code>lpf</code>, <code>bpf</code>, <code>hpf</code>for low-pass/bandpass/hi-pass, <code>vowel</code> for vowel formant filters</li>
+<li>NOTE: effects like delay and reverb (and <code>leslie</code>) are "global" effects, they affect all synths within a given group
+<ul>
+<li>specify groups with <code>orbit (int)</code>(0 default)</li>
+</ul></li>
+</ul>
+
+<h2>CHANCE FUNCTIONS</h2>
+
+<ul>
+<li>execute things by chance!</li>
+<li><code>sometimesBy (f)</code> to execute things by chance on a event-by-event basis
+<ul>
+<li><code>p 1 $ sometimesBy 0.25 (|+ note 12) $ note "0 7 12" # s "superpiano"</code></li>
+</ul></li>
+<li><code>someCyclesBy (f)</code> to execute things by change on a cycle-by-cycle basis</li>
+</ul>
+
+<h2>CONTINUOUS FUNCTIONS</h2>
+
+<ul>
+<li>functions that don't have discrete steps (and so using them to structure patterns makes things go really fast)
+<ul>
+<li>can be made discrete with <code>segment (int)</code> which discretizes the function into given steps</li>
+</ul></li>
+<li>usually used as arguments for parameters (<code># pan (rand)</code>)</li>
+<li><code>rand</code> for float randomness 0-1 (pair with <code>range (lo) (hi)</code> to map to a specific range)</li>
+<li><code>irand (int)</code> for random ints from 0 to n-1</li>
+<li><code>saw</code> for ramp 0-1 over cycle (<code>isaw</code> for the other way around)</li>
+<li><code>square</code> for switching from 0 to 1 midway through cycle</li>
+<li><code>sine</code>/<code>cosine</code> for their respective ranges</li>
+<li><code>tri</code> for linearly ramping from 0 to 1 to 0 over a given cycle</li>
+<li>NOTE: can use <code>slow</code> and <code>fast</code> to change the rates of these functions!</li>
+</ul>
+
+<h2>OTHER RANDOMNESS</h2>
+
+<ul>
+<li>all continuous</li>
+<li><code>choose [a]</code> to choose elements from array</li>
+<li><code>wchoose [a]</code> to choose by given weights in the format <code>(choice, weight)</code>
+-<code>cycleChoose [a]</code> makes a choice per cycle and thus <strong>not continuous</strong>!</li>
+</ul>
+
+<h2>SOME TRANSITIONS</h2>
+
+<ul>
+<li>used for not changing patterns immediately</li>
+<li>take the form <code>(transition) (pattern name) (number of cycles)</code></li>
+<li>transitions start when executed but have forms followed by <code>'</code> that aligns their execution to the next cycle start</li>
+<li><code>xfadeIn</code>/<code>xfadeIn'</code> for crossfades, <code>jumpIn</code>/<code>jumpIn'</code> for immediate switches <code>clutchIn</code> for pattern xfades (not gain-based)...</li>
+</ul>
+
+<h2>RANDOM HASKELL NOTES</h2>
+
+<ul>
+<li><code>$</code> doubles as putting everything to the right in parentheses</li>
+<li>negative numbers require parentheses
+<ul>
+<li><code># speed -1</code> doesn't work but <code># speed (-1)</code> does!</li>
 </ul></li>
 </ul>
 
