@@ -1,8 +1,16 @@
 # TIDALCYCLES INTRO
 [https://tidalcycles.org/](https://tidalcycles.org/)
 
+## WHAT IS LIVE CODING
+- evaluating code snippets realtime
+
+## WHY LIVE CODING
+- tool made to express musical (or visual) ideas quickly (closer to improvisation)
+  - does a lot for you (but at the same restricts musical scope)
+  - even more so than more general purpose computer music software (Max/MSP, Pure Data, CSound, bare-bones SuperCollider)
+
 ## WHAT IS TIDALCYCLES
-- a way of generating music through code live
+- a way of generating music through code live created by Alex McLean (yaxu)
 - operates on around the basis of "cycles" (musical equivalent to bar/measure)
 
 ## COMPONENTS
@@ -32,7 +40,7 @@
 ##### LINUX ALT.
 - `sudo apt install ghc cabal-install`
 
-#### MAC ALT.
+##### MAC ALT.
 - `brew install ghc cabal-install`
 
 #### EDITOR PLUGINS

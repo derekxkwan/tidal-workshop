@@ -371,6 +371,14 @@ a:hover { text-decoration: underline; }
 <ul>
 <li><code># speed -1</code> doesn't work but <code># speed (-1)</code> does!</li>
 </ul></li>
+<li>comments are <code>--</code></li>
+<li>assigning variables works! (but can enforce local binding with <code>let</code> if evaluating code block)</li>
+<li>execute changes in multiple patterns in <code>do</code> block (<code>let</code> bindings at top)
+<ul>
+<li>whitespace matters (code indented within <code>do</code> block, successive <code>let</code>bindings have same level of indentation)</li>
+<li>expressions executed sequentially (so can define pattern earlier and silence later and will not sound)</li>
+<li>can use <code>;</code> to have expressions on the same line</li>
+</ul></li>
 </ul>
 
 <h2>OTHER CAPABILITIES</h2>

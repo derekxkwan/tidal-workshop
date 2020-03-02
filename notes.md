@@ -197,6 +197,12 @@
 - `$` doubles as putting everything to the right in parentheses
 - negative numbers require parentheses
   - `# speed -1` doesn't work but `# speed (-1)` does!
+- comments are `--`
+- assigning variables works! (but can enforce local binding with `let` if evaluating code block)
+- execute changes in multiple patterns in `do` block (`let` bindings at top)
+  - whitespace matters (code indented within `do` block, successive `let`bindings have same level of indentation)
+  - expressions executed sequentially (so can define pattern earlier and silence later and will not sound)
+  - can use `;` to have expressions on the same line
 
 ## OTHER CAPABILITIES
 - custom OSC message output (link up with `p5.js`)
