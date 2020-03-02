@@ -1,5 +1,4 @@
 # MISC
-
 ## WHY TIDAL CYCLES?
 - pattern strings allow for concise expression of rhythmic ideas
 - software stack a bit more transparent than Sonic Pi (and easier to install on Linux)
@@ -24,16 +23,17 @@
   - can be interplay (so keep ears open) 
 
 ## ALTERNATIVES - LIVE CODING FOR SOUND
-- Sonic Pi (Ruby + erlang for OSC + SuperCollider) - Sam Aaron
-- Overtone (Clojure + SuperCollider) - Sam Aaron
-- FoxDot (Python + SuperCollider) - Ryan Kirkbridge (Qirky)
-- ORCA (JavaScript/Electron or C + Pilot as an option for sound) - hundredrabbits
-- Gibber (JavaScript) - Charlie Roberts
+- [Sonic Pi](https://sonic-pi.net/) (Ruby + erlang for OSC + SuperCollider) - Sam Aaron
+- [Overtone](https://overtone.github.io/) (Clojure + SuperCollider) - Sam Aaron
+- [FoxDot](https://foxdot.org/) (Python + SuperCollider) - Ryan Kirkbridge (Qirky)
+- [ORCA](https://hundredrabbits.itch.io/orca) (JavaScript/Electron or C + Pilot as an option for sound) - hundredrabbits
+- [Gibber](http://charlie-roberts.com/gibber/) (JavaScript) - Charlie Roberts
 
 ## LIVE CODING FOR VISUALS
--  Hydra (JavaScript) - Olivia Jack
+-  [Hydra](https://ojack.github.io/articles/hydra/index.html) (JavaScript) - Olivia Jack
 
 ## RESOURCES
 - [https://algorave.com/](https://algorave.com/) - Algorave
 - [https://toplap.org/](https://toplap.org/) - TOPLAP - Alex McLean
+- [https://github.com/toplap/awesome-livecoding/blob/master/README.md](https://github.com/toplap/awesome-livecoding/blob/master/README.md) - awesome live coding repo
 - [https://iclc.livecodenetwork.org/](https://iclc.livecodenetwork.org/) - International Conference on Live Coding
