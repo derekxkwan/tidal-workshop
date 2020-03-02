@@ -7,6 +7,8 @@
   - what happens when we change `"bd sn"` to `"bd sn cp"`?
 - `hush`ing individual patterns: `silence`
   - `p 1 $ silence`
+- `setcps (f)` sets the overall tempo (cycles per second)
+  - `setcps 0.6` for 0.6 cycles per second
 
 ## MINI NOTATION
 - grouping `[]` (`.` shorthand)
@@ -16,25 +18,26 @@
   - `s "bd [~ ho]"`
 - hold `_`
   - `s "bd [_ ho]"`
-- fast (repeat) `*` (think of `sn` as its own little cycle)
-  - `s "bd [sn*2 ho]"`
-  - equivalent: `s "bd [sn sn . ho]"`
 - replicate `!`
   - `s "bd [sn ! . ho]"`
   - `s "[bd !] [sn!4 . ho]"`
 	- equivalent: `s "[bd bd]  [sn sn sn sn . ho]"`
- - 	- equivalent: `s "[bd bd]  [sn ! ! ! . ho]"`
+    - equivalent: `s "[bd bd]  [sn ! ! ! . ho]"`
+- fast (repeat) `*` (think of `sn` as its own little cycle)
+  - `s "bd [sn*2 ho]"`
+  - equivalent: `s "bd [sn sn . ho]"`
 - slow `/` (think of `bd` as its own little cycle)
   - `s "bd/2"`
-- alternate `<>`
+- specify content for different cycles `<>`
   - `s "<bd cp> sn"`
+  - proof that `/` and `*` really can be considered little mini-embedded cycles: `p 1 $ s "<bd/2 sn>"`
 - chance `?` (50%)
   - `s "bd? sn"`
 - layering `,`
   - `s "bd [sn, cp]"`  
 
 ## TACKING ON EFFECTS PARAMETERS
-- things that affect the output of the pattern
+- things that affect the (sonic) output of the pattern
 - `#`
 - let's try tacking on a low-pass filter
   - `p 1 $ s "bd sn" # lpf 250`
@@ -53,9 +56,11 @@
   - `p 1 $ degradeBy 0.25 $ s "bd sn"`
 - let's make the pattern go twice as fast (`*`)
   - `p 1 $ fast 2 $ s "bd sn"`
+- let's repeat events!
+  - `p 1 $ ply 2 $ s "bd sn"`
 - let's add a copy of the pattern that goes twice as fast and has things drop out randomly
   - `p 1 $ superimpose (fast 2 . degradeBy 0.25) $ s "bd sn"`
-  - note that in the parentheses, we string together `$` type things with `.`
+- note that in the parentheses, we string together `$` type things with `.`
   - `#` requires the `#` and parentheses and the `.` (`superimpose (fast 2 . (# lpf 100))`)
 - in general, these **functions** go to the **left** of the pattern string
 
@@ -82,6 +87,7 @@
   - `p 1 $ superimpose (fast 2 . (|* speed 2)) $ speed "2 1 1 1" # s "hh"`
 
 ## SAMPLE MANIPULATION
+- `bd`, `sn`, `hh`, etc. are all samples!
 - use `legato 1` or `cut 1` for making sure sample segments don't bleed over (the int in `cut` groups together things to cut)
 - the parameters `begin` and `end` (helpful when reversing a sample ie `# speed (-1)`) control the start/end points of a sample and range from 0 to 1
 - `slice` can also be used as a function to slice up samples
@@ -129,6 +135,12 @@
   - `p 1 $ sometimesBy 0.25 (|+ note 12) $ note "0 7 12" # s "superpiano"`
 - `someCyclesBy (f)` to execute things by change on a cycle-by-cycle basis
 
+## CONDITIONAL FUNCTIONS
+- execute something every n cycles
+  - `p 1 $ every 5 (ply 2) $ s "bd sn"`
+- execute something  after y cycles every x cycles
+  - `p 1 $ whenmod 8 6 (ply 2) $ s "sn bd"`
+
 ## CONTINUOUS FUNCTIONS
 - functions that don't have discrete steps (and so using them to structure patterns makes things go really fast)
   - can be made discrete with `segment (int)` which discretizes the function into given steps
@@ -147,11 +159,39 @@
 - `wchoose [a]` to choose by given weights in the format `(choice, weight)`
 -`cycleChoose [a]` makes a choice per cycle and thus **not continuous**!
 
+## SEQUENCING FUNCTIONS
+- `fastcat [a]` fits all patterns in an array into one cycle
+  - `p 1 $ fastcat [note "0 4 7", note "0 4 7 11"] $ s "superpiano"`
+- `slowcat [a]` (or `cat` for short) works like `<>` and sequences each pattern one after another
+  - `p 1 $ cat [note "0 4 7", note "0 4 7 11"] $ s "superpiano"`
+- `randcat [a]` choose a pattern randomly each cycle
+  - `p 1 $ randcat [note "0 4 7", note "0 4 7 11"] $ s "superpiano"`
+
+## OTHER HELPFUL FUNCTIONS
+- `shuffle (i) (patt str)` shuffles a pattern according to given number of subdivisons
+  - `p 1 $ s (shuffle 2 "bd hh cp hh")`
+- `((f) <~)` shifts cycles forward by given proportion
+  - `p 1 $ layer[id, (0.25 <~)] $ s "bd sn"`
+  - `((f) ~>)` goes the other way
+- replace patterns with `const`
+  - `p 1 $ every 3 (const $ note "0 4 11") $ note "0 2 4" # s "superpiano"`
+- `euclid (i) (i)` makes euclidean rhythms!
+  - `p 1 $ euclid 3 8 $ s "bd"`
+  - equivalent: `p 1 $ s "bd(3,8)"`
+
 ## SOME TRANSITIONS
 - used for not changing patterns immediately
 - take the form `(transition) (pattern name) (number of cycles)`
 - transitions start when executed but have forms followed by `'` that aligns their execution to the next cycle start
 - `xfadeIn`/`xfadeIn'` for crossfades, `jumpIn`/`jumpIn'` for immediate switches `clutchIn` for pattern xfades (not gain-based)...
+
+## A LITTLE MORE MINI NOTATION
+- `{pat1,pat2}` can be used to fit one pattern in within the subdivisions of another
+  - `p 1 $ s "{cp ~ ~ ~, bd ~ sn}"`(`bd ~ sn` gets treated as if each step were the sizes of `cp ~ ~ ~"`'s
+  - shorthand if you just want to specify one pattern: `p 1 $ s "{bd ~ sn}%4"`
+- `{,}@(i)` can be used to specify proportions that patterns fit in
+  - say you want `bd hh cp hh` to fit in the space of 3/5 of a cycle and `bd sn` to fit in the space of 2/5
+	- `p 1 $ s "{bd hh cp hh}@3 {bd sn}@2"` (3 + 2 = 5)
 
 ## RANDOM HASKELL NOTES
 - `$` doubles as putting everything to the right in parentheses

@@ -34,6 +34,10 @@ a:hover { text-decoration: underline; }
 <ul>
 <li><code>p 1 $ silence</code></li>
 </ul></li>
+<li><code>setcps (f)</code> sets the overall tempo (cycles per second)
+<ul>
+<li><code>setcps 0.6</code> for 0.6 cycles per second</li>
+</ul></li>
 </ul>
 
 <h2>MINI NOTATION</h2>
@@ -52,27 +56,26 @@ a:hover { text-decoration: underline; }
 <ul>
 <li><code>s "bd [_ ho]"</code></li>
 </ul></li>
-<li>fast (repeat) <code>*</code> (think of <code>sn</code> as its own little cycle)
-<ul>
-<li><code>s "bd [sn*2 ho]"</code></li>
-<li>equivalent: <code>s "bd [sn sn . ho]"</code></li>
-</ul></li>
 <li>replicate <code>!</code>
 <ul>
 <li><code>s "bd [sn ! . ho]"</code></li>
 <li><code>s "[bd !] [sn!4 . ho]"</code></li>
 <li>equivalent: <code>s "[bd bd]  [sn sn sn sn . ho]"</code></li>
-<li><ul>
 <li>equivalent: <code>s "[bd bd]  [sn ! ! ! . ho]"</code></li>
 </ul></li>
+<li>fast (repeat) <code>*</code> (think of <code>sn</code> as its own little cycle)
+<ul>
+<li><code>s "bd [sn*2 ho]"</code></li>
+<li>equivalent: <code>s "bd [sn sn . ho]"</code></li>
 </ul></li>
 <li>slow <code>/</code> (think of <code>bd</code> as its own little cycle)
 <ul>
 <li><code>s "bd/2"</code></li>
 </ul></li>
-<li>alternate <code>&lt;&gt;</code>
+<li>specify content for different cycles <code>&lt;&gt;</code>
 <ul>
 <li><code>s "&lt;bd cp&gt; sn"</code></li>
+<li>proof that <code>/</code> and <code>*</code> really can be considered little mini-embedded cycles: <code>p 1 $ s "&lt;bd/2 sn&gt;"</code></li>
 </ul></li>
 <li>chance <code>?</code> (50%)
 <ul>
@@ -87,7 +90,7 @@ a:hover { text-decoration: underline; }
 <h2>TACKING ON EFFECTS PARAMETERS</h2>
 
 <ul>
-<li>things that affect the output of the pattern</li>
+<li>things that affect the (sonic) output of the pattern</li>
 <li><code>#</code></li>
 <li>let's try tacking on a low-pass filter
 <ul>
@@ -121,10 +124,16 @@ a:hover { text-decoration: underline; }
 <ul>
 <li><code>p 1 $ fast 2 $ s "bd sn"</code></li>
 </ul></li>
+<li>let's repeat events!
+<ul>
+<li><code>p 1 $ ply 2 $ s "bd sn"</code></li>
+</ul></li>
 <li>let's add a copy of the pattern that goes twice as fast and has things drop out randomly
 <ul>
 <li><code>p 1 $ superimpose (fast 2 . degradeBy 0.25) $ s "bd sn"</code></li>
-<li>note that in the parentheses, we string together <code>$</code> type things with <code>.</code></li>
+</ul></li>
+<li>note that in the parentheses, we string together <code>$</code> type things with <code>.</code>
+<ul>
 <li><code>#</code> requires the <code>#</code> and parentheses and the <code>.</code> (<code>superimpose (fast 2 . (# lpf 100))</code>)</li>
 </ul></li>
 <li>in general, these <strong>functions</strong> go to the <strong>left</strong> of the pattern string</li>
@@ -173,6 +182,7 @@ a:hover { text-decoration: underline; }
 <h2>SAMPLE MANIPULATION</h2>
 
 <ul>
+<li><code>bd</code>, <code>sn</code>, <code>hh</code>, etc. are all samples!</li>
 <li>use <code>legato 1</code> or <code>cut 1</code> for making sure sample segments don't bleed over (the int in <code>cut</code> groups together things to cut)</li>
 <li>the parameters <code>begin</code> and <code>end</code> (helpful when reversing a sample ie <code># speed (-1)</code>) control the start/end points of a sample and range from 0 to 1</li>
 <li><code>slice</code> can also be used as a function to slice up samples
@@ -250,6 +260,19 @@ a:hover { text-decoration: underline; }
 <li><code>someCyclesBy (f)</code> to execute things by change on a cycle-by-cycle basis</li>
 </ul>
 
+<h2>CONDITIONAL FUNCTIONS</h2>
+
+<ul>
+<li>execute something every n cycles
+<ul>
+<li><code>p 1 $ every 5 (ply 2) $ s "bd sn"</code></li>
+</ul></li>
+<li>execute something  after y cycles every x cycles
+<ul>
+<li><code>p 1 $ whenmod 8 6 (ply 2) $ s "sn bd"</code></li>
+</ul></li>
+</ul>
+
 <h2>CONTINUOUS FUNCTIONS</h2>
 
 <ul>
@@ -276,6 +299,46 @@ a:hover { text-decoration: underline; }
 -<code>cycleChoose [a]</code> makes a choice per cycle and thus <strong>not continuous</strong>!</li>
 </ul>
 
+<h2>SEQUENCING FUNCTIONS</h2>
+
+<ul>
+<li><code>fastcat [a]</code> fits all patterns in an array into one cycle
+<ul>
+<li><code>p 1 $ fastcat [note "0 4 7", note "0 4 7 11"] $ s "superpiano"</code></li>
+</ul></li>
+<li><code>slowcat [a]</code> (or <code>cat</code> for short) works like <code>&lt;&gt;</code> and sequences each pattern one after another
+<ul>
+<li><code>p 1 $ cat [note "0 4 7", note "0 4 7 11"] $ s "superpiano"</code></li>
+</ul></li>
+<li><code>randcat [a]</code> choose a pattern randomly each cycle
+<ul>
+<li><code>p 1 $ randcat [note "0 4 7", note "0 4 7 11"] $ s "superpiano"</code></li>
+</ul></li>
+</ul>
+
+<h2>OTHER HELPFUL FUNCTIONS</h2>
+
+<ul>
+<li><code>shuffle (i) (patt str)</code> shuffles a pattern according to given number of subdivisons
+<ul>
+<li><code>p 1 $ s (shuffle 2 "bd hh cp hh")</code></li>
+</ul></li>
+<li><code>((f) &lt;~)</code> shifts cycles forward by given proportion
+<ul>
+<li><code>p 1 $ layer[id, (0.25 &lt;~)] $ s "bd sn"</code></li>
+<li><code>((f) ~&gt;)</code> goes the other way</li>
+</ul></li>
+<li>replace patterns with <code>const</code>
+<ul>
+<li><code>p 1 $ every 3 (const $ note "0 4 11") $ note "0 2 4" # s "superpiano"</code></li>
+</ul></li>
+<li><code>euclid (i) (i)</code> makes euclidean rhythms!
+<ul>
+<li><code>p 1 $ euclid 3 8 $ s "bd"</code></li>
+<li>equivalent: <code>p 1 $ s "bd(3,8)"</code></li>
+</ul></li>
+</ul>
+
 <h2>SOME TRANSITIONS</h2>
 
 <ul>
@@ -283,6 +346,21 @@ a:hover { text-decoration: underline; }
 <li>take the form <code>(transition) (pattern name) (number of cycles)</code></li>
 <li>transitions start when executed but have forms followed by <code>'</code> that aligns their execution to the next cycle start</li>
 <li><code>xfadeIn</code>/<code>xfadeIn'</code> for crossfades, <code>jumpIn</code>/<code>jumpIn'</code> for immediate switches <code>clutchIn</code> for pattern xfades (not gain-based)...</li>
+</ul>
+
+<h2>A LITTLE MORE MINI NOTATION</h2>
+
+<ul>
+<li><code>{pat1,pat2}</code> can be used to fit one pattern in within the subdivisions of another
+<ul>
+<li><code>p 1 $ s "{cp ~ ~ ~, bd ~ sn}"</code>(<code>bd ~ sn</code> gets treated as if each step were the sizes of <code>cp ~ ~ ~"</code>'s</li>
+<li>shorthand if you just want to specify one pattern: <code>p 1 $ s "{bd ~ sn}%4"</code></li>
+</ul></li>
+<li><code>{,}@(i)</code> can be used to specify proportions that patterns fit in
+<ul>
+<li>say you want <code>bd hh cp hh</code> to fit in the space of 3/5 of a cycle and <code>bd sn</code> to fit in the space of 2/5</li>
+<li><code>p 1 $ s "{bd hh cp hh}@3 {bd sn}@2"</code> (3 + 2 = 5)</li>
+</ul></li>
 </ul>
 
 <h2>RANDOM HASKELL NOTES</h2>
