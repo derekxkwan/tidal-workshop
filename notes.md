@@ -11,7 +11,7 @@
   - `setcps 0.6` for 0.6 cycles per second
 
 ## MINI NOTATION
-- grouping `[]` (`.` shorthand)
+- grouping `[]` (`.` shorthand, `{}` alternative)
   - `s "bd [sn ho]"`
   - equivalent: `s "bd . sn ho"`
 - rests `~`
