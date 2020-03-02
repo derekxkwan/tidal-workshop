@@ -1,5 +1,6 @@
 # TIDALCYCLES INTRO
-[https://tidalcycles.org/](https://tidalcycles.org/)
+- TidalCycles link - [https://tidalcycles.org/](https://tidalcycles.org/)
+- these notes link - [https://github.com/derekxkwan/tidal-workshop](https://github.com/derekxkwan/tidal-workshop)
 
 ## WHAT IS LIVE CODING
 - evaluating code snippets realtime
@@ -50,6 +51,10 @@
 - [https://supercollider.github.io/](https://supercollider.github.io/)
 - `Quarks.gui` -> Check `SuperDirt`
 - Note for Linux users, require use of `JACK`
+
+### DOCKER IMAGES (look outdated)
+- [https://github.com/lvm/tida1vm](https://github.com/lvm/tida1vm) - tida1vm
+- [https://github.com/DoubleDensity/tidebox](https://github.com/DoubleDensity/tidebox) - tidebox
 
 ## GET UP AND RUNNING
 - Start SuperCollider
